@@ -1,35 +1,68 @@
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.util.Arrays;
+import java.util.Map;
 
-public class Cube implements Component {
-  private final Vector3[] vertices;
-  private double scale;
-  private Vector3 position;
+public class Cube implements Drawable {
 
-  public Cube() {
-    vertices =
-        new Vector3[] {
-          new Vector3(-0.5, -0.5, -0.5),
-          new Vector3(0.5, -0.5, -0.5),
-          new Vector3(0.5, 0.5, -0.5),
-          new Vector3(-0.5, 0.5, -0.5),
-          new Vector3(-0.5, -0.5, 0.5),
-          new Vector3(0.5, -0.5, 0.5),
-          new Vector3(0.5, 0.5, 0.5),
-          new Vector3(-0.5, 0.5, 0.5),
+  private static final Map<RenderingHints.Key, Object> RENDERING_HINTS =
+      Map.of(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+  private final Vector3[] vertices =
+      new Vector3[] {
+        new Vector3(-0.5, -0.5, -0.5),
+        new Vector3(0.5, -0.5, -0.5),
+        new Vector3(0.5, 0.5, -0.5),
+        new Vector3(-0.5, 0.5, -0.5),
+        new Vector3(-0.5, -0.5, 0.5),
+        new Vector3(0.5, -0.5, 0.5),
+        new Vector3(0.5, 0.5, 0.5),
+        new Vector3(-0.5, 0.5, 0.5),
+      };
+
+  private double angle = 0;
+  private double scale = 150;
+  private double rotationVelocity = 0.01;
+  private Vector3 position = new Vector3(Frame.WIDTH / 2, Frame.HEIGHT / 2, 0);
+
+  @Override
+  public Vector3[] update() {
+    this.angle += rotationVelocity;
+
+    var rotMatrixX =
+        new double[][] {
+          {1, 0, 0},
+          {0, Math.cos(angle), -Math.sin(angle)},
+          {0, Math.sin(angle), Math.cos(angle)},
         };
-    scale = 150;
-    position = new Vector3(World.WIDTH / 2, World.HEIGHT / 2, 0);
+    var rotMatrixY =
+        new double[][] {
+          {Math.cos(angle), 0, -Math.sin(angle)},
+          {0, 1, 0},
+          {Math.sin(angle), 0, Math.cos(angle)}
+        };
+    var rotMatrixZ =
+        new double[][] {
+          {Math.cos(angle), -Math.sin(angle), 0},
+          {Math.sin(angle), Math.cos(angle), 0},
+          {0, 0, 1}
+        };
+
+    return Arrays.stream(this.vertices)
+        .map(
+            vertex ->
+                vertex
+                    .mul(rotMatrixX)
+                    .mul(rotMatrixY)
+                    .mul(rotMatrixZ)
+                    .mul(this.scale)
+                    .add(this.position))
+        .toArray(Vector3[]::new);
   }
 
   @Override
-  public void paint(Graphics2D g, World world) {
-    var vertices =
-        Arrays.stream(this.vertices)
-            .map(world::transform)
-            .map(v -> v.mul(scale).add(position))
-            .toArray(Vector3[]::new);
+  public void draw(Graphics2D g, Vector3[] vertices) {
+    g.setRenderingHints(RENDERING_HINTS);
 
     g.setColor(Color.BLACK);
 
@@ -50,7 +83,7 @@ public class Cube implements Component {
     drawLine(g, vertices[7], vertices[3]);
   }
 
-  private void drawLine(Graphics2D g, Vector3 pointA, Vector3 pointB) {
-    g.draw(new Line2D.Double(pointA.x(), pointA.y(), pointB.x(), pointB.y()));
+  private void drawLine(Graphics2D g, Vector3 a, Vector3 b) {
+    g.draw(new Line2D.Double(a.x(), a.y(), b.x(), b.y()));
   }
 }
