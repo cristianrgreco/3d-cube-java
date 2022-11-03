@@ -31,6 +31,6 @@ public class View {
   }
 
   public void register(Container container) {
-    container.add(this.panel);
+    container.add(this.panel, BorderLayout.CENTER);
   }
 }

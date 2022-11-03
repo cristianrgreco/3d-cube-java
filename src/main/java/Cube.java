@@ -23,13 +23,22 @@ public class Cube implements Drawable {
   private Vector3[] vertices = VERTICES;
   private double angle = 0;
   private double scale = 150;
-  private double rotationVelocity = 0.01;
-  private Vector3 position = new Vector3(Frame.WIDTH / 2, Frame.HEIGHT / 2, 0);
+  private double rotationVelocity = 100;
+  private boolean xRotation = true;
+  private boolean yRotation = true;
+  private boolean zRotation = true;
+  private Vector3 position = new Vector3(225, 150, 0);
 
   @Override
   public void update(World world) {
-    this.angle += rotationVelocity;
+    this.angle += (rotationVelocity / 10000);
 
+    var identityMatrix =
+        new double[][] {
+          {1, 0, 0},
+          {0, 1, 0},
+          {1, 0, 1},
+        };
     var rotMatrixX =
         new double[][] {
           {1, 0, 0},
@@ -54,9 +63,9 @@ public class Cube implements Drawable {
             .map(
                 vertex ->
                     vertex
-                        .mul(rotMatrixX)
-                        .mul(rotMatrixY)
-                        .mul(rotMatrixZ)
+                        .mul(xRotation ? rotMatrixX : identityMatrix)
+                        .mul(yRotation ? rotMatrixY : identityMatrix)
+                        .mul(zRotation ? rotMatrixZ : identityMatrix)
                         .mul(this.scale)
                         .add(this.position)
                         .mul(world.getProjectionMatrix()))
@@ -88,5 +97,47 @@ public class Cube implements Drawable {
 
   private void drawLine(Graphics2D g, Vector3 a, Vector3 b) {
     g.draw(new Line2D.Double(a.x(), a.y(), b.x(), b.y()));
+  }
+
+  public double getScale() {
+    return scale;
+  }
+
+  public void setScale(double scale) {
+    this.scale = scale;
+  }
+
+  public double getRotationVelocity() {
+    return rotationVelocity;
+  }
+
+  public void setRotationVelocity(double rotationVelocity) {
+    this.rotationVelocity = rotationVelocity;
+  }
+
+  public Vector3 getPosition() {
+    return position;
+  }
+
+  public void setPositionX(double x) {
+    this.position = new Vector3(x, this.position.y(), this.position.z());
+  }
+
+  public void setPositionY(double y) {
+    this.position = new Vector3(this.position.x(), y, this.position.z());
+  }
+
+  public void setPositionZ(double z) {
+    this.position = new Vector3(this.position.x(), this.position.y(), z);
+  }
+
+  public void setRotationX(boolean xRotation) {
+    this.xRotation = xRotation;
+  }
+  public void setRotationY(boolean yRotation) {
+    this.yRotation = yRotation;
+  }
+  public void setRotationZ(boolean zRotation) {
+    this.zRotation = zRotation;
   }
 }

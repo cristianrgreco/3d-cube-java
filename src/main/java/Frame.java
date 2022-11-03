@@ -1,9 +1,10 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class Frame {
 
-  public static final int WIDTH = 400;
-  public static final int HEIGHT = 400;
+  public static final int WIDTH = 450;
+  public static final int HEIGHT = 550;
 
   private final JFrame jFrame;
 
@@ -12,7 +13,12 @@ public class Frame {
     this.jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     this.jFrame.setLocationRelativeTo(null);
     this.jFrame.setSize(WIDTH, HEIGHT);
+    this.jFrame.setLayout(new BorderLayout());
     this.jFrame.setResizable(false);
+  }
+
+  public void addControls(Controls controls) {
+    this.jFrame.getContentPane().add(controls.getJPanel(), BorderLayout.NORTH);
   }
 
   public void addView(View view) {
