@@ -6,7 +6,18 @@ public class World {
     {0, 0, 1}
   };
 
-  public double[][] getProjectionMatrix() {
+  private double distance = 0;
+
+  public double[][] getOrthographicProjection() {
     return ORTHOGRAPHIC_PROJECTION;
+  }
+
+  public double[][] getWeakPerspectiveProjection(double z) {
+    var scale = 1 / (distance - z);
+    return new double[][] {
+      {scale, 0, 0},
+      {0, scale, 0},
+      {0, 0, 1}
+    };
   }
 }

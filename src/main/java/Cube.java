@@ -27,7 +27,7 @@ public class Cube implements Drawable {
   private boolean xRotation = true;
   private boolean yRotation = true;
   private boolean zRotation = true;
-  private Vector3 position = new Vector3(225, 150, 0);
+  private Vector3 position = new Vector3(225, 150, -1);
 
   @Override
   public void update(World world) {
@@ -68,7 +68,7 @@ public class Cube implements Drawable {
                         .mul(zRotation ? rotMatrixZ : identityMatrix)
                         .mul(this.scale)
                         .add(this.position)
-                        .mul(world.getProjectionMatrix()))
+                        .mul(world.getWeakPerspectiveProjection(this.position.z())))
             .toArray(Vector3[]::new);
   }
 
