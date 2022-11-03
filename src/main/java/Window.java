@@ -35,6 +35,10 @@ public class Window {
     components.add(component);
   }
 
+  public void draw() {
+    frame.repaint();
+  }
+
   public void show() {
     frame.setVisible(true);
   }
