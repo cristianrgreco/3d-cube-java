@@ -8,7 +8,7 @@ public record Vector3(double x, double y, double z) {
     return new Vector3(x * scalar, y * scalar, z * scalar);
   }
 
-  public Vector3 mul(double[][] matrix){
+  public Vector3 mul(double[][] matrix) {
     return new Vector3(
         x * matrix[0][0] + y * matrix[0][1] + z * matrix[0][2],
         x * matrix[1][0] + y * matrix[1][1] + z * matrix[1][2],

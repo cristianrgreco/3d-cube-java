@@ -134,9 +134,11 @@ public class Cube implements Drawable {
   public void setRotationX(boolean xRotation) {
     this.xRotation = xRotation;
   }
+
   public void setRotationY(boolean yRotation) {
     this.yRotation = yRotation;
   }
+
   public void setRotationZ(boolean zRotation) {
     this.zRotation = zRotation;
   }

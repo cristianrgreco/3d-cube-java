@@ -98,7 +98,7 @@ public class Controls {
 
     c.gridx = 1;
     c.gridwidth = 3;
-    var slider = new JSlider(-200, 800, (int) cube.getPosition().x());
+    var slider = new JSlider(-200, 700, (int) cube.getPosition().x());
     slider.addChangeListener(e -> cube.setPositionX(((JSlider) e.getSource()).getValue()));
     layout.setConstraints(slider, c);
     this.jPanel.add(slider);
@@ -116,7 +116,7 @@ public class Controls {
 
     c.gridx = 1;
     c.gridwidth = 3;
-    var slider = new JSlider(-200, 800, (int) cube.getPosition().y());
+    var slider = new JSlider(-200, 500, (int) cube.getPosition().y());
     slider.addChangeListener(e -> cube.setPositionY(((JSlider) e.getSource()).getValue()));
     layout.setConstraints(slider, c);
     this.jPanel.add(slider);
@@ -134,7 +134,7 @@ public class Controls {
 
     c.gridx = 1;
     c.gridwidth = 3;
-    var slider = new JSlider(-300, -100, (int) cube.getPosition().z() * 100);
+    var slider = new JSlider(-300, -0, (int) cube.getPosition().z() * 100);
     slider.addChangeListener(e -> cube.setPositionZ(((JSlider) e.getSource()).getValue() / 100d));
     layout.setConstraints(slider, c);
     this.jPanel.add(slider);
