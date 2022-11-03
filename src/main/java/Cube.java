@@ -8,7 +8,7 @@ public class Cube implements Drawable {
   private static final Map<RenderingHints.Key, Object> RENDERING_HINTS =
       Map.of(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-  private final Vector3[] vertices =
+  private static final Vector3[] VERTICES =
       new Vector3[] {
         new Vector3(-0.5, -0.5, -0.5),
         new Vector3(0.5, -0.5, -0.5),
@@ -20,13 +20,14 @@ public class Cube implements Drawable {
         new Vector3(-0.5, 0.5, 0.5),
       };
 
+  private Vector3[] vertices = VERTICES;
   private double angle = 0;
   private double scale = 150;
   private double rotationVelocity = 0.01;
   private Vector3 position = new Vector3(Frame.WIDTH / 2, Frame.HEIGHT / 2, 0);
 
   @Override
-  public Vector3[] update() {
+  public void update(World world) {
     this.angle += rotationVelocity;
 
     var rotMatrixX =
@@ -48,20 +49,22 @@ public class Cube implements Drawable {
           {0, 0, 1}
         };
 
-    return Arrays.stream(this.vertices)
-        .map(
-            vertex ->
-                vertex
-                    .mul(rotMatrixX)
-                    .mul(rotMatrixY)
-                    .mul(rotMatrixZ)
-                    .mul(this.scale)
-                    .add(this.position))
-        .toArray(Vector3[]::new);
+    this.vertices =
+        Arrays.stream(VERTICES)
+            .map(
+                vertex ->
+                    vertex
+                        .mul(rotMatrixX)
+                        .mul(rotMatrixY)
+                        .mul(rotMatrixZ)
+                        .mul(this.scale)
+                        .add(this.position)
+                        .mul(world.getProjectionMatrix()))
+            .toArray(Vector3[]::new);
   }
 
   @Override
-  public void draw(Graphics2D g, Vector3[] vertices) {
+  public void draw(Graphics2D g) {
     g.setRenderingHints(RENDERING_HINTS);
 
     g.setColor(Color.BLACK);

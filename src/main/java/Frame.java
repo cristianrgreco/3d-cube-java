@@ -5,22 +5,21 @@ public class Frame {
   public static final int WIDTH = 400;
   public static final int HEIGHT = 400;
 
-  private final JFrame frame;
+  private final JFrame jFrame;
 
   public Frame(String title) {
-    this.frame = new JFrame(title);
-    this.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    this.frame.setLocationRelativeTo(null);
-    this.frame.setSize(WIDTH, HEIGHT);
-    this.frame.setResizable(false);
+    this.jFrame = new JFrame(title);
+    this.jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    this.jFrame.setLocationRelativeTo(null);
+    this.jFrame.setSize(WIDTH, HEIGHT);
+    this.jFrame.setResizable(false);
   }
 
-  public void setView(View view) {
-    this.frame.getContentPane().removeAll();
-    this.frame.getContentPane().add(view.getPanel());
+  public void addView(View view) {
+    view.register(this.jFrame.getContentPane());
   }
 
   public void show() {
-    frame.setVisible(true);
+    jFrame.setVisible(true);
   }
 }

@@ -1,31 +1,36 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 
 public class View {
 
+  private final Drawable[] drawables;
   private final JPanel panel;
 
-  public View(World world, Drawable... drawables) {
+  public View(Drawable... drawables) {
+    this.drawables = drawables;
     this.panel =
         new JPanel() {
           @Override
           public void paint(Graphics g) {
             super.paintComponent(g);
             for (Drawable drawable : drawables) {
-              var vertices = drawable.update();
-              var worldVertices = Arrays.stream(vertices).map(world::transform).toArray(Vector3[]::new);
-              drawable.draw((Graphics2D) g, worldVertices);
+              drawable.draw((Graphics2D) g);
             }
           }
         };
   }
 
-  public void tick() {
+  public void update(World world) {
+    for (Drawable drawable : this.drawables) {
+      drawable.update(world);
+    }
+  }
+
+  public void draw() {
     this.panel.repaint();
   }
 
-  public JPanel getPanel() {
-    return panel;
+  public void register(Container container) {
+    container.add(this.panel);
   }
 }

@@ -1,13 +1,12 @@
 public class World {
 
-  public Vector3 transform(Vector3 vertex) {
-    var orthographicProjection =
-        new double[][] {
-          {1, 0, 0},
-          {0, 1, 0},
-          {0, 0, 1}
-        };
+  private static final double[][] ORTHOGRAPHIC_PROJECTION = {
+    {1, 0, 0},
+    {0, 1, 0},
+    {0, 0, 1}
+  };
 
-    return vertex.mul(orthographicProjection);
+  public double[][] getProjectionMatrix() {
+    return ORTHOGRAPHIC_PROJECTION;
   }
 }
