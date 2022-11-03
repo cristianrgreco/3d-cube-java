@@ -1,5 +1,8 @@
 public class World {
 
+  public static final int WIDTH = 400;
+  public static final int HEIGHT = 400;
+
   private float angle;
 
   public World() {
@@ -32,10 +35,6 @@ public class World {
           {0, 0, 1}
         };
 
-    return vertex
-        .mul(rotMatrixX)
-        .mul(rotMatrixY)
-        .mul(rotMatrixZ)
-        .mul(orthographicProjection);
+    return vertex.mul(rotMatrixX).mul(rotMatrixY).mul(rotMatrixZ).mul(orthographicProjection);
   }
 }
