@@ -1,4 +1,4 @@
-# 3D Cube
+# 3D v1.Cube
 
 Requires Java 17.
 

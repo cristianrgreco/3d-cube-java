@@ -1,2 +1,3 @@
 rootProject.name = 'spinning-3d-cube'
+include 'lwjgl'
 

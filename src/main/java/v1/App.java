@@ -1,3 +1,5 @@
+package v1;
+
 import static java.util.concurrent.Executors.newScheduledThreadPool;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
@@ -7,7 +9,7 @@ public class App {
     var cube = new Cube();
     var view = new View(cube);
     var controls = new Controls(cube);
-    var frame = new Frame("3D Cube");
+    var frame = new Frame("3D v1.Cube");
     var world = new World();
 
     frame.addControls(controls);
