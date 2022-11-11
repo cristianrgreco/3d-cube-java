@@ -3,6 +3,7 @@ package chapter5;
 import lombok.SneakyThrows;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
@@ -12,6 +13,7 @@ import java.nio.IntBuffer;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
+import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -58,6 +60,14 @@ public class Window {
     window = glfwCreateWindow(300, 300, "Hello World!", NULL, NULL);
     if (window == NULL) throw new RuntimeException("Failed to create the GLFW window");
 
+    glfwSetFramebufferSizeCallback(
+        window,
+        (win, width, height) -> {
+          this.width = width;
+          this.height = height;
+          // glViewport(0, 0, width, height);
+        });
+
     // Setup a key callback. It will be called every time a key is pressed, repeated or released.
     glfwSetKeyCallback(
         window,
@@ -102,7 +112,7 @@ public class Window {
     // bindings available for use.
     GL.createCapabilities();
 
-    var renderer = new Renderer(this.width, this.height);
+    var renderer = new Renderer();
     var models =
         new Model[] {
           new Model(
@@ -127,7 +137,7 @@ public class Window {
     // Run the rendering loop until the user has attempted to close
     // the window or has pressed the ESCAPE key.
     while (!glfwWindowShouldClose(window)) {
-      renderer.render(models);
+      renderer.render(this.width, this.height, models);
 
       glfwSwapBuffers(window); // swap the color buffers
 
