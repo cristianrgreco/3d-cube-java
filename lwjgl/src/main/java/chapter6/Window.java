@@ -1,13 +1,20 @@
-package chapter5;
+package chapter6;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR;
 import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MINOR;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_X;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
 import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_CORE_PROFILE;
 import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_FORWARD_COMPAT;
 import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_PROFILE;
+import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
@@ -15,6 +22,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
 import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
+import static org.lwjgl.glfw.GLFW.glfwGetKey;
 import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
 import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
 import static org.lwjgl.glfw.GLFW.glfwGetWindowSize;
@@ -38,6 +46,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 import java.nio.IntBuffer;
 import lombok.SneakyThrows;
+import org.joml.Vector3f;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -139,6 +148,8 @@ public class Window {
     // bindings available for use.
     GL.createCapabilities();
 
+    var camera = new Camera();
+    var mouse = new Mouse(this.window);
     var renderer = new Renderer();
     var models =
         new Model[] {
@@ -164,7 +175,29 @@ public class Window {
     // Run the rendering loop until the user has attempted to close
     // the window or has pressed the ESCAPE key.
     while (!glfwWindowShouldClose(window)) {
-      renderer.render(this.width, this.height, models);
+      mouse.update();
+      var cameraDisplacement = new Vector3f();
+      if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        cameraDisplacement.z = -1;
+      } else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        cameraDisplacement.z = 1;
+      }
+      if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        cameraDisplacement.x = -1;
+      } else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        cameraDisplacement.x = 1;
+      }
+      if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
+        cameraDisplacement.y = -1;
+      } else if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
+        cameraDisplacement.y = 1;
+      }
+      camera.movePosition(cameraDisplacement);
+      if (mouse.isRightButtonPressed()) {
+        camera.moveRotation(new Vector3f(mouse.getOffset(), 0));
+      }
+
+      renderer.render(this.width, this.height, camera, models);
 
       glfwSwapBuffers(window); // swap the color buffers
 
