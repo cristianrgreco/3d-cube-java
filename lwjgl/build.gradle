@@ -44,4 +44,6 @@ dependencies {
     runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-vulkan::$lwjglNatives"
     implementation "org.joml:joml:${jomlVersion}"
+
+    implementation "org.l33tlabs.twl:pngdecoder:1.0"
 }

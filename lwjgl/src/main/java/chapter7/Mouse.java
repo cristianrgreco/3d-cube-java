@@ -1,4 +1,4 @@
-package chapter6;
+package chapter7;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_1;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_2;
@@ -32,15 +32,15 @@ public class Mouse {
     glfwSetCursorPosCallback(
         this.windowHandle,
         (window, xPos, yPos) -> {
-          this.currentPosition.x = (float) xPos;
-          this.currentPosition.y = (float) yPos;
+          currentPosition.x = (float) xPos;
+          currentPosition.y = (float) yPos;
         });
-    glfwSetCursorEnterCallback(this.windowHandle, (window, entered) -> this.inWindow = entered);
+    glfwSetCursorEnterCallback(this.windowHandle, (window, entered) -> inWindow = entered);
     glfwSetMouseButtonCallback(
         this.windowHandle,
         (window, button, action, mods) -> {
-          this.leftButtonPressed = button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS;
-          this.rightButtonPressed = button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS;
+          leftButtonPressed = button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS;
+          rightButtonPressed = button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS;
         });
   }
 
@@ -48,9 +48,9 @@ public class Mouse {
     offset.x = 0;
     offset.y = 0;
 
-    if (this.previousPosition.x > 0 && this.previousPosition.y > 0 && inWindow) {
-      var deltaX = this.currentPosition.x - this.previousPosition.x;
-      var deltaY = this.currentPosition.y - this.previousPosition.y;
+    if (previousPosition.x > 0 && previousPosition.y > 0 && inWindow) {
+      var deltaX = currentPosition.x - previousPosition.x;
+      var deltaY = currentPosition.y - previousPosition.y;
 
       if (deltaX != 0) {
         offset.y = deltaX;
@@ -60,7 +60,7 @@ public class Mouse {
       }
     }
 
-    this.previousPosition.x = this.currentPosition.x;
-    this.previousPosition.y = this.currentPosition.y;
+    previousPosition.x = currentPosition.x;
+    previousPosition.y = currentPosition.y;
   }
 }
