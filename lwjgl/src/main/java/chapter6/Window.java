@@ -40,7 +40,9 @@ import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
+import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -148,6 +150,8 @@ public class Window {
     // bindings available for use.
     GL.createCapabilities();
 
+    glEnable(GL_DEPTH_TEST);
+
     var camera = new Camera();
     var mouse = new Mouse(this.window);
     var renderer = new Renderer();
@@ -156,19 +160,46 @@ public class Window {
           new Model(
               new Mesh(
                   new float[] {
-                    -0.5f, 0.5f, -1.05f,
-                    -0.5f, -0.5f, -1.05f,
-                    0.5f, -0.5f, -1.05f,
-                    0.5f, 0.5f, -1.05f,
+                    // VO
+                    -0.5f, 0.5f, 0.5f,
+                    // V1
+                    -0.5f, -0.5f, 0.5f,
+                    // V2
+                    0.5f, -0.5f, 0.5f,
+                    // V3
+                    0.5f, 0.5f, 0.5f,
+                    // V4
+                    -0.5f, 0.5f, -0.5f,
+                    // V5
+                    0.5f, 0.5f, -0.5f,
+                    // V6
+                    -0.5f, -0.5f, -0.5f,
+                    // V7
+                    0.5f, -0.5f, -0.5f,
                   },
                   new float[] {
                     0.5f, 0.0f, 0.0f,
                     0.0f, 0.5f, 0.0f,
                     0.0f, 0.0f, 0.5f,
                     0.0f, 0.5f, 0.5f,
+                    0.5f, 0.0f, 0.0f,
+                    0.0f, 0.5f, 0.0f,
+                    0.0f, 0.0f, 0.5f,
+                    0.0f, 0.5f, 0.5f,
                   },
                   new int[] {
+                    // Front face
                     0, 1, 3, 3, 1, 2,
+                    // Top Face
+                    4, 0, 3, 5, 4, 3,
+                    // Right face
+                    3, 2, 7, 5, 3, 7,
+                    // Left face
+                    6, 1, 0, 6, 0, 4,
+                    // Bottom face
+                    2, 1, 6, 2, 6, 7,
+                    // Back face
+                    7, 6, 4, 7, 4, 5,
                   }))
         };
 
